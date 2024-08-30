@@ -71,3 +71,35 @@ curl -X POST http://localhost:3000/api/navigate -H "Content-Type: application/js
     ]
 }
 ```
+
+## Running the Project Locally
+
+Follow these steps to run the project on your local machine:
+
+1. **Clone the Repository**  
+   Clone the repository to your local machine using Git:
+   ```bash
+   git clone [<repository-url>](https://github.com/falakthkr/europa-robots)
+   ```
+2. **Navigate to the project directory**
+   Move into the project directory:
+   ```bash
+   cd europa-robots
+   ```
+3. **Install Dependencies**
+   Install the necessary dependencies using npm or yarn:
+   ```bash
+   npm install
+   ```
+   or
+   ```bash
+   yarn install
+   ```
+4. **Run the Application**
+   Start the application:
+   ```bash
+   node server.js
+   ```
+
+Then you can test it using your methods, I personally prefer postman for API testing.
+
