@@ -4,28 +4,51 @@ const { moveRobot } = require("../functions/robotFunctions");
 const Robot = require("../models/robotModel");
 
 const navigateRobots = (req, res) => {
-  const { plateau, robots } = req.body;
+  const { robots, query } = req.body;
 
-  if (!plateau || !robots) {
-    return res
-      .status(400)
-      .json({ error: "Plateau size and robots data are required" });
+  if (!robots) {
+    return res.status(400).json({ error: "Robots data are required" });
   }
 
-  const results = robots.map((robot) => {
-    const [x, y, orientation] = robot.start.split(" ");
+  let plateauData = robots.map((robot, index) => {
+    return {
+      id: index,
+      finalPosition: "",
+      fuelStatus: "",
+    };
+  });
+
+  let queryData = plateauData[query - 1];
+
+  const results = robots.map((robot, index) => {
+    const [x, y, orientation, fuel] = robot.start.split(" ");
     const commands = robot.commands;
 
     const finalPosition = moveRobot(
       commands,
       parseInt(x),
       parseInt(y),
-      orientation
+      orientation,
+      fuel
     );
+    plateauData[robots.indexOf(robot)].finalPosition = finalPosition;
     return `${finalPosition.x} ${finalPosition.y} ${finalPosition.orientation}`;
   });
 
-  res.json({ results });
+  const fuelStatus = robots.map((robot, index) => {
+    const [x, y, orientation, fuel] = robot.start.split(" ");
+    const commands = robot.commands;
+
+    if (commands.length > fuel) {
+      plateauData[robots.indexOd(robot)].fuelStatus = 0;
+      return `Robot ran out of fuel!!`;
+    } else {
+      plateauData[robots.indexOf(robot)].fuelStatus = fuel - commands.length;
+      return `Robot has ${fuel - commands.length} amount of fuel available!`;
+    }
+  });
+
+  res.json({ results, fuelStatus, queryData });
 };
 
 module.exports = {
